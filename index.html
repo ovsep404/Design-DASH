@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Item Display</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        #random-item-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        #item-name {
+            font-size: 1.5em;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        header {
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        #logo {
+            display: inline-block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 10%;
+
+        }
+
+        @media (max-width: 600px) {
+            #random-item-display {
+                max-width: 100%;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+<header>
+    <img id="logo" src="Logo Design Dash.png" alt="Logo">
+</header>
+<div class="container">
+    <div id="random-item-display">
+        <h2>Your random code rule:</h2>
+        <p id="item-name"></p>
+    </div>
+</div>
+<script>
+    const itemsArray = ["Lose 5 points", "Lose 10 points", "Lose 15 points", "Lose 20 points", "Move forward 3 spaces", "move forward 2 spaces", "Move forward 1 space", "Go to the nearest shortcut"];
+
+    function getRandomIndex() {
+        return Math.floor(Math.random() * itemsArray.length);
+    }
+
+    function displayRandomItem() {
+        const randomIndex = getRandomIndex();
+        const itemName = itemsArray[randomIndex];
+        document.getElementById("item-name").innerText = itemName;
+    }
+
+    function canGenerate() {
+        const lastGeneratedTime = localStorage.getItem("lastGeneratedTime");
+        if (!lastGeneratedTime) {
+            return true; // Allow generation if it's the first time
+        }
+
+        const currentTime = new Date().getTime();
+        const elapsedTime = currentTime - parseInt(lastGeneratedTime, 10);
+        return elapsedTime >= 10000; // 10000 milliseconds = 10 seconds
+    }
+
+    function updateLastGeneratedTime() {
+        const currentTime = new Date().getTime();
+        localStorage.setItem("lastGeneratedTime", currentTime.toString());
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (canGenerate()) {
+            displayRandomItem();
+            updateLastGeneratedTime();
+        } else {
+            const itemError = "Please wait 10 seconds before generating a new code rule"
+            document.getElementById("item-name").innerText = itemError;
+            document.getElementById("item-name").style.color = "red";
+
+        }
+    });
+</script>
+
+</body>
+</html>
